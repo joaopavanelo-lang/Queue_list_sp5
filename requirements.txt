@@ -1,5 +1,4 @@
-playwright
-pandas
 gspread
-selenium
+pandas
 oauth2client
+playwright
