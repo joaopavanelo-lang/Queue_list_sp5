@@ -49,7 +49,7 @@ def update_packing_google_sheets(csv_file_path):
         planilhas_destino = [
             {
                 "url": "https://docs.google.com/spreadsheets/d/1JB1Gsge39BMcn0eCutuAClLUtvvpGfhaK9mg7fFlKeg/edit?gid=1360806683#gid=1360806683",
-                "aba": "Queue list SPX"
+                "aba": "Queue List SPX"
             }
         ]
 
