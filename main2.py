@@ -43,13 +43,10 @@ def update_packing_google_sheets(csv_file_path):
         # 3. Lista de planilhas e abas que vão receber os dados
         planilhas_destino = [
             {
-                "url": "https://docs.google.com/spreadsheets/d/1LZ8WUrgN36Hk39f7qDrsRwvvIy1tRXLVbl3-wSQn-Pc/edit?gid=1903873220#gid=1903873220",
-                "aba": "Queue list"
-            },
-            {
-                "url": "https://docs.google.com/spreadsheets/d/1nMLHR6Xp5xzQjlhwXufecG1INSQS4KrHn41kqjV9Rmk/edit?gid=0#gid=0",
-                "aba": "Base"
+                "url": "https://docs.google.com/spreadsheets/d/1JB1Gsge39BMcn0eCutuAClLUtvvpGfhaK9mg7fFlKeg/edit?gid=1360806683#gid=1360806683",
+                "aba": "Queue list SPX"
             }
+            
         ]
 
         # 4. Loop para atualizar todas as planilhas configuradas
