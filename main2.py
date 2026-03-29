@@ -7,6 +7,7 @@ import shutil
 import gspread
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
+import traceback # <-- Nova biblioteca adicionada para logs detalhados
 
 DOWNLOAD_DIR = "/tmp"
 
@@ -15,13 +16,17 @@ def rename_downloaded_file(download_dir, download_path):
         current_hour = datetime.now().strftime("%H")
         new_file_name = f"QUEUE-{current_hour}.csv"
         new_file_path = os.path.join(download_dir, new_file_name)
+        
         if os.path.exists(new_file_path):
             os.remove(new_file_path)
+            
         shutil.move(download_path, new_file_path)
         print(f"Arquivo salvo como: {new_file_path}")
         return new_file_path
     except Exception as e:
-        print(f"Erro ao renomear o arquivo: {e}")
+        print(f"❌ Erro ao renomear o arquivo: {e}")
+        print("Detalhes do erro:")
+        print(traceback.format_exc())
         return None
 
 def update_packing_google_sheets(csv_file_path):
@@ -46,7 +51,6 @@ def update_packing_google_sheets(csv_file_path):
                 "url": "https://docs.google.com/spreadsheets/d/1JB1Gsge39BMcn0eCutuAClLUtvvpGfhaK9mg7fFlKeg/edit?gid=1360806683#gid=1360806683",
                 "aba": "Queue list SPX"
             }
-            
         ]
 
         # 4. Loop para atualizar todas as planilhas configuradas
@@ -60,7 +64,9 @@ def update_packing_google_sheets(csv_file_path):
             
         time.sleep(5)
     except Exception as e:
-        print(f"Erro durante o processo de envio para o Sheets: {e}")
+        print(f"❌ Erro na função update_packing_google_sheets: {e}")
+        print("Detalhes do erro:")
+        print(traceback.format_exc())
 
 async def main():        
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
@@ -132,7 +138,9 @@ async def main():
                 print("Processo finalizado com sucesso.")
                 
         except Exception as e:
-            print(f"Erro durante o processo de extração: {e}")
+            print(f"❌ Erro na função main (processo de extração/navegação): {e}")
+            print("Detalhes do erro:")
+            print(traceback.format_exc())
         finally:
             if browser:
                 await browser.close()
