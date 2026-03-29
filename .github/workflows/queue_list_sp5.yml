@@ -1,0 +1,44 @@
+name: Queue List SP5
+
+on:
+  workflow_dispatch:  # Permite execução manual
+
+# 🔥 TRAVA DE SEGURANÇA 🔥
+# Garante a fila inteligente (um espera o outro)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15    # Mata o processo se travar por mais de 15min
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Instalar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Restaurar hxh.json
+        shell: bash
+        run: |
+          echo "$GCP_JSON_BASE64" | base64 -d > hxh.json
+        env:
+          GCP_JSON_BASE64: ${{ secrets.GCP_JSON_BASE64 }}
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install playwright
+          playwright install chromium
+          # 👇 OBRIGATÓRIO: Instala dependências do sistema para o Chrome rodar no Linux
+          playwright install-deps
+
+      - name: Executar o script
+        # 👇 Define resolução 1920x1080 para evitar erros visuais na Shopee
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" python main2.py
